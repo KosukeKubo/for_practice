@@ -8,6 +8,9 @@ import numpy as np
 X = np.random.rand(1000, 10)
 y = np.random.randint(0, 2, 1000)
 
+def evaluate_result(pred, y) -> bool:
+    return pred ==y
+
 def train_pipeline(X, y):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
