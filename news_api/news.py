@@ -13,5 +13,5 @@ response = requests.get(url, params)
 data = response.json()
 
 for article in data["articles"][:5]:
-    print(article["title"]})
+    print(article["title"])
     print(article["url"])
