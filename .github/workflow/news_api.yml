@@ -1,0 +1,36 @@
+name: Daily IT News Collector
+
+# 実行タイミングの設定
+on:
+  schedule:
+    # 毎日 日本時間 08:00 (UTC 23:00) に実行
+    - cron: '0 23 * * *'
+  workflow_dispatch: # ボタンから手動実行もできるようにする設定（テストに便利）
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHub上のコードを仮想マシンにコピー
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Pythonの環境をセットアップ
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. 必要なライブラリ（requestsなど）をインストール
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # 4. Pythonプログラムの実行
+      - name: Run collector script
+        env:
+          # GitHubのSecretsに保存したAPIキーを環境変数として渡す
+          API_KEY: ${{ secrets.MY_API_KEY }}
+        run: python news_api/news.py
