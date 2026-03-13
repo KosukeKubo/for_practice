@@ -5,13 +5,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
+# 1. データ作成（ダミー）
 X = np.random.rand(1000, 10)
 y = np.random.randint(0, 2, 1000)
 
-def evaluate_result(pred, y) -> bool:
-    return pred ==y
-
 def train_pipeline(X, y):
+    # 2. 【データリーク】スケーリングのタイミング
+    # 本来は分割後に train のみで fit すべき
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     
@@ -34,6 +34,8 @@ def train_pipeline(X, y):
     # 学習ループ
     epochs = 10
     for epoch in range(epochs):
+        # 3. 【重要な欠落】勾配のリセット
+        # optimizer.zero_grad() がどこにもない
         
         outputs = model(X_train)
         loss = criterion(outputs, y_train)
@@ -41,10 +43,13 @@ def train_pipeline(X, y):
         loss.backward()
         optimizer.step()
         
+        # 4. 【メモリリークの火種】ログ記録
+        # Pythonの計算グラフを保持したままリストに溜めてしまう
         if epoch % 2 == 0:
             print(f"Epoch {epoch}, Loss: {loss}") 
 
-
+    # 5. 【評価時のミス】モデルの状態と勾配計算
+    # model.eval() も torch.no_grad() もない
     test_outputs = model(torch.FloatTensor(X_test))
     _, predicted = torch.max(test_outputs, 1)
     
