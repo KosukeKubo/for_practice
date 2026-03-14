@@ -14,12 +14,14 @@ def get_news(key_word: str="AI", n: int=5):
     
     response = requests.get(url, params=params)
     data = response.json()
+    print(f"{data=}")
 
     # Discordに送るための「1つのメッセージ（文字列）」を組み立てる
     message = f"📢 今日の【{key_word}】ニュース上位{n}件をお届けします！\n\n"
     
     # data["articles"]が空の場合のエラー回避
     articles = data.get("articles", [])
+    print(f"{articles=}")
     for article in articles[:n]:
         title = article["title"]
         url = article["url"]
