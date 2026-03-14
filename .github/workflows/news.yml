@@ -32,6 +32,6 @@ jobs:
       - name: Run collector script
         env:
           # GitHubのSecretsに保存したAPIキーを環境変数として渡す
-          API_KEY: ${{ secrets.NEWS_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           DISCORD_AI_NEWS_COLLECTOR_URL: ${{ secrets.DISCORD_AI_NEWS_COLLECTOR_URL }}
         run: python news_api/news.py
