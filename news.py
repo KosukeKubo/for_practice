@@ -1,7 +1,7 @@
 import requests
 import os
 
-def get_news(key_word: n: int=5):
+def get_news(n: int=5):
     url = "https://newsapi.org/v2/everything"
     NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 
