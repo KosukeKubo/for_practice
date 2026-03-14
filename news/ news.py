@@ -1,10 +1,11 @@
 import requests
 import os
 
-def get_news(key_word: str="AI", n: int=5):
+def get_news(key_word: n: int=5):
     url = "https://newsapi.org/v2/everything"
     NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
-    
+
+    key_word = os.environ.get("NEWS_KEY_WORD")
     params = {
         "q": key_word,
         "searchIn": "title",
@@ -50,7 +51,7 @@ def get_qiita_news(n: int=5):
     
     data = response.json()
     
-    message = f"📚 Qiitaの【{key_word}】新着記事をお届けします！\n\n"
+    message = f"📚 Qiitaの【{key_word}】に関する新着記事をお届けします！\n\n"
     
     for item in data:
         title = item["title"]
@@ -78,7 +79,7 @@ def send_discord(message_text):
 
 if __name__ == "__main__":
     # 1. ニュースを取得して文字列にまとめる
-    content = get_qiita_news("AI", 5)
+    content = get_qiita_news(5)
     
     # 2. まとめた文字列を送信する
     send_discord(content)
