@@ -29,6 +29,38 @@ def get_news(key_word: str="AI", n: int=5):
 
     return message
 
+
+def get_qiita_news(key_word: str="AI", n: int=5):
+    # Qiitaの記事取得エンドポイント
+    url = "https://qiita.com/api/v2/items"
+    
+    # パラメータの設定
+    params = {
+        "query": f"tag:{key_word}", # タグで検索（"AI"タグがついた記事）
+        "per_page": n,              # 取得件数
+        "page": 1                   # 最初のページ
+    }
+    
+    # 認証なし（headersなし）でリクエスト
+    response = requests.get(url, params=params)
+    
+    if response.status_code != 200:
+        return f"Qiitaエラー: {response.status_code}"
+    
+    data = response.json()
+    
+    message = f"📚 Qiitaの【{key_word}】新着記事をお届けします！\n\n"
+    
+    for item in data:
+        title = item["title"]
+        url = item["url"]
+        # Qiitaは記事を書いたユーザー名も取れるので追加してみる
+        user = item["user"]["id"]
+        message += f"🔹 {title} (by {user})\n{url}\n\n"
+        
+    return message
+    
+
 def send_discord(message_text):
     DISCORD_URL = os.environ.get("DISCORD_AI_NEWS_COLLECTOR_URL")
     
@@ -45,7 +77,7 @@ def send_discord(message_text):
 
 if __name__ == "__main__":
     # 1. ニュースを取得して文字列にまとめる
-    content = get_news("AI", 5)
+    content = get_qiita_news("AI", 5)
     
     # 2. まとめた文字列を送信する
     send_discord(content)
