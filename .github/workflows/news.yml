@@ -35,4 +35,4 @@ jobs:
           NEWS_KEY_WORD: ${{ vars.NEWS_KEY_WORD }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           DISCORD_AI_NEWS_COLLECTOR_URL: ${{ secrets.DISCORD_AI_NEWS_COLLECTOR_URL }}
-        run: python news/news.py
+        run: python ./news/news.py
