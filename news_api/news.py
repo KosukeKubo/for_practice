@@ -30,11 +30,12 @@ def get_news(key_word: str="AI", n: int=5):
     return message
 
 
-def get_qiita_news(key_word: str="AI", n: int=5):
+def get_qiita_news(n: int=5):
     # Qiitaの記事取得エンドポイント
     url = "https://qiita.com/api/v2/items"
     
     # パラメータの設定
+    key_word = os.environ.get("NEWS_KEY_WORD")
     params = {
         "query": f"tag:{key_word}", # タグで検索（"AI"タグがついた記事）
         "per_page": n,              # 取得件数
